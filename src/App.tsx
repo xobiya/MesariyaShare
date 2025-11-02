@@ -7,6 +7,9 @@ import { HomePage } from './components/HomePage';
 import { ToolDetailsPage } from './components/ToolDetailsPage';
 import { AddToolPage } from './components/AddToolPage';
 import { ProfilePage } from './components/ProfilePage';
+import SignInPage from './components/SignInPage';
+import SignUpPage from './components/SignUpPage';
+import { useUser } from './context/UserContext';
 import { Dashboard } from './components/Dashboard';
 import { MessagesPage } from './components/MessagesPage';
 import { SearchResultsPage } from './components/SearchResultsPage';
@@ -234,7 +237,20 @@ export default function App() {
   const [favorites, setFavorites] = useState<Set<string>>(new Set(['1', '4']));
   const [showRentalDialog, setShowRentalDialog] = useState(false);
 
+  const { setUser } = useUser();
+
   const handleNavigate = (page: string) => {
+    // Intercept signout action
+    if (page === 'signout') {
+      // clear local user
+      try {
+        localStorage.removeItem('mesariyashare_user');
+      } catch (e) {}
+      setUser(null as any);
+      setCurrentPage('landing');
+      return;
+    }
+
     setCurrentPage(page);
     setSelectedToolId(null);
   };
@@ -358,6 +374,14 @@ export default function App() {
           onBack={() => handleNavigate('home')}
           onSubmit={handleSubmitTool}
         />
+      )}
+
+      {currentPage === 'signin' && (
+        <SignInPage onBack={() => handleNavigate('home')} onSuccess={() => handleNavigate('dashboard')} />
+      )}
+
+      {currentPage === 'signup' && (
+        <SignUpPage onBack={() => handleNavigate('home')} onSuccess={() => handleNavigate('dashboard')} />
       )}
 
       {currentPage === 'dashboard' && (

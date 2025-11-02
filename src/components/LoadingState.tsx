@@ -39,6 +39,7 @@ export function LoadingSpinner() {
       <div className="relative w-12 h-12">
         <div className="absolute top-0 left-0 w-full h-full border-4 border-blue-200 rounded-full"></div>
         <div className="absolute top-0 left-0 w-full h-full border-4 border-blue-600 rounded-full border-t-transparent animate-spin"></div>
+      <span className="sr-only">Loading…</span>
       </div>
     </div>
   );
